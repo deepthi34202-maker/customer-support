@@ -1,33 +1,13 @@
 import streamlit as st
 from transformers import pipeline
-from transformers.conversational import Conversation
 
-# Load Hugging Face conversational model
-chatbot = pipeline("conversational", model="microsoft/DialoGPT-medium")
-
-# FAQ data
-faq_data = {
-    "reset password": "Click 'Forgot Password' on the login page and follow the instructions.",
-    "refund policy": "Refunds are available within 30 days of purchase with receipt.",
-    "order status": "You can track your order in the 'My Orders' section of your account."
-}
-
-def get_faq_answer(user_query):
-    for key in faq_data:
-        if key in user_query.lower():
-            return faq_data[key]
-    return None
+# Load BlenderBot model (lighter, no tokenizers build issues)
+chatbot = pipeline("conversational", model="facebook/blenderbot-400M-distill")
 
 def chat(user_message):
-    # First check FAQ
-    faq_answer = get_faq_answer(user_message)
-    if faq_answer:
-        return faq_answer
-    
-    # Otherwise use DialoGPT
-    conv = Conversation(user_message)
-    response = chatbot(conv)
-    return response.generated_responses[-1]
+    response = chatbot(user_message)
+    # BlenderBot returns a list of dicts, so we extract the text
+    return response[0]['generated_text']
 
 # Streamlit UI
 st.title("AI Customer Support Assistant")
