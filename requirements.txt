@@ -1,3 +1,4 @@
-transformers==4.41.2
+Ftransformers==4.41.2
 torch
 streamlit
+
