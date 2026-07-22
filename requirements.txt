@@ -1,5 +1,6 @@
 transformers==4.41.2
-torch==2.2.2
+torch
 streamlit
 tokenizers==0.19.1
+
 
